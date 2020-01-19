@@ -3,6 +3,8 @@ Mandelbrot Viewer is a simple application which utilises the GPU via OpenGL to v
 
 ## Preview
 
+![Preview One](docs/example1.jpg)
+
 ## Running and Usage
 
 The viewer can be imported as a project to the IntelliJ IDE and controlled with:
