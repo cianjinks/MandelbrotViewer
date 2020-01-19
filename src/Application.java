@@ -1,4 +1,5 @@
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -21,6 +22,7 @@ public class Application {
     private final int WIDTH = 4;
     private final int HEIGHT = 4;
     private final String TITLE = "Mandelbrot Viewer";
+    private final Vector4f BACKGROUND_COLOUR = new Vector4f(0.6f, 0.0f, 46f / 255f, 1.0f);
 
     private int screenshotCount = 1;
     private boolean moveRight = false;
@@ -170,7 +172,7 @@ public class Application {
         GLUtil.setupDebugMessageCallback();
 
         // Background Colour
-        glClearColor(0.6f, 0.0f, 46f / 255f, 1.0f);
+        glClearColor(BACKGROUND_COLOUR.x, BACKGROUND_COLOUR.y, BACKGROUND_COLOUR.z, BACKGROUND_COLOUR.w);
 
         // Vertices
         Vertex v0 = new Vertex(); v0.setXYZ(-2f, 2f, 0f);

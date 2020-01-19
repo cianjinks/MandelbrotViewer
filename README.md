@@ -1,13 +1,16 @@
 # Mandelbrot Viewer
 Mandelbrot Viewer is a simple application which utilises the GPU via OpenGL to visualize the Mandelbrot Set in real time.  
+It has up to a 32-bit zoom due to the limitations of OpenGL floats.
 
 ## Preview
 
 ![Preview One](docs/example1.jpg)
+![Preview Two](docs/example2.jpg)
+![Preview Three](docs/example3.jpg)
 
 ## Running and Usage
 
-The viewer can be imported as a project to the IntelliJ IDE and controlled with:
+The program can be imported as a project to the IntelliJ IDE and controlled with:
 
   <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd> for panning.
   
@@ -25,6 +28,8 @@ Some useful configuration variables:
     - The scale of the complex axis (4 would be [-2, 2]).
     TITLE:
     - The window's title.
+    BACKGROUND_COLOUR:
+    - The window's background colour.
     
   **res/shaders/frag.shader**
   
