@@ -29,3 +29,8 @@ Some useful configuration variables:
     This file contains the math for generating the Mandelbrot Set. 
     If you wish to change the colours of the set you should modify the colorFunc function.
     It takes in a parameter "iter" which is the number of iterations it took before the point on the set became >= 2.
+    
+## Libraries
+
+* [LWJGL 3](https://www.lwjgl.org/) (minimal OpenGL configuration)
+* [JOML](https://github.com/JOML-CI/JOML) (math library)
