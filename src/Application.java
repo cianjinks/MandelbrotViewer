@@ -22,6 +22,7 @@ public class Application {
     private final int HEIGHT = 4;
     private final String TITLE = "Mandelbrot Viewer";
 
+    private int screenshotCount = 1;
     private boolean moveRight = false;
     private boolean moveLeft = false;
     private boolean moveUp = false;
@@ -68,6 +69,12 @@ public class Application {
             }
 
             // Camera Control
+            // Screenshot:
+            if (key == GLFW_KEY_K && action == GLFW_PRESS) {
+                camera.takeScreenShot("res/screenshots/screenshot" + screenshotCount + ".jpg", PIXEL_WIDTH, PIXEL_HEIGHT);
+                screenshotCount++;
+            }
+
             // Right:
             if (key == GLFW_KEY_D && action == GLFW_PRESS) {
                 moveRight = true;
