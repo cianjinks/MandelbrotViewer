@@ -16,8 +16,8 @@ public class Application {
     // The window handle
     private long window;
     private Camera camera;
-    private final int PIXEL_WIDTH = 960;
-    private final int PIXEL_HEIGHT = 960;
+    private final int PIXEL_WIDTH = 480;
+    private final int PIXEL_HEIGHT = 480;
     private final int WIDTH = 4;
     private final int HEIGHT = 4;
     private final String TITLE = "Mandelbrot Viewer";
