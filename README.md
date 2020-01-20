@@ -16,6 +16,8 @@ The program can be imported as a project to the IntelliJ IDE and controlled with
   
   <kbd>Z</kbd>, <kbd>X</kbd> or scroll wheel for zooming in and out.
   
+  <kbd>K</kbd> to take a screenshot.
+  
 ## Configuration
 
 Some useful configuration variables:
