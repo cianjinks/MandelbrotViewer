@@ -38,7 +38,7 @@ Some useful configuration variables:
     This file contains the math for generating the Mandelbrot Set. 
     If you wish to change the colours of the set you should modify the colorFunc function.
     It takes in a parameter "iter" which is the number of iterations it took before the 
-    modulus of a point on the set became >= 4.
+    modulus of a point on the set became > 4.
     
 ## Libraries
 
