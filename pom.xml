@@ -7,12 +7,30 @@
     <groupId>com.hobbesos</groupId>
     <artifactId>MandelbrotViwer</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <url>https://github.com/HobbesOSWasTaken/MandelbrotViewer</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>HobbesOS</name>
+            <email>cjinks99@gmail.com</email>
+        </developer>
+    </developers>
+
     <properties>
         <lwjgl.version>3.2.3</lwjgl.version>
         <joml.version>1.9.20</joml.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -65,21 +83,10 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>Application</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -95,6 +102,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
         </plugins>
