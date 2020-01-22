@@ -8,15 +8,21 @@ It has up to a 32-bit zoom due to the limitations of OpenGL floats.
 ![Preview Two](docs/example2.jpg)
 ![Preview Three](docs/example3.jpg)
 
-## Running and Usage
+## Building
 
-The program can be imported as a project to the IntelliJ IDE and controlled with:
+  The application can be built with [Maven](https://maven.apache.org/):
+    
+    mvn clean package
+    
+  The jar file will be available in the `./target` directory.
+
+## Controls
 
   <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd> for panning.
   
   <kbd>Z</kbd>, <kbd>X</kbd> or scroll wheel for zooming in and out.
   
-  <kbd>K</kbd> to take a screenshot.
+  <kbd>K</kbd> to take a screenshot. **(Currently Disabled)**
   
 ## Configuration
 
