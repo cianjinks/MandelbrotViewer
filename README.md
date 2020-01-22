@@ -28,7 +28,7 @@ It has up to a 32-bit zoom due to the limitations of OpenGL floats.
 
 Some useful configuration variables:
 
-  **src/Application.java**
+  **src/main/java/Application.java**
   
     PIXEL_WIDTH & PIXEL_HEIGHT:
     - The window's resolution.
@@ -39,7 +39,7 @@ Some useful configuration variables:
     BACKGROUND_COLOUR:
     - The window's background colour.
     
-  **res/shaders/frag.shader**
+  **src/resources/shaders/frag.shader**
   
     This file contains the math for generating the Mandelbrot Set. 
     If you wish to change the colours of the set you should modify the colorFunc function.
