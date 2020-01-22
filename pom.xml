@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hobbesos</groupId>
-    <artifactId>MandelbrotViwer</artifactId>
+    <artifactId>MandelbrotViewer</artifactId>
     <version>1.0</version>
 
     <url>https://github.com/HobbesOSWasTaken/MandelbrotViewer</url>
