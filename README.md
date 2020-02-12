@@ -4,9 +4,9 @@ It has up to a 32-bit zoom due to the limitations of OpenGL floats.
 
 ## Preview
 
-![Preview One](docs/example1.jpg)
-![Preview Two](docs/example2.jpg)
-![Preview Three](docs/example3.jpg)
+![Preview One](docs/example1_1.jpg)
+![Preview Two](docs/example2_1.jpg)
+![Preview Three](docs/example3_1.jpg)
 
 ## Building
 
@@ -26,7 +26,13 @@ It has up to a 32-bit zoom due to the limitations of OpenGL floats.
   
 ## Configuration
 
-Some useful configuration variables:
+**GUI**
+
+    The UI allows you to configure the color and precision of the set via a pure 
+    java binding of ImGUI. The variables it modifies are the uniform variables u_Color
+    and u_maxIter used in the fragment shader below.
+
+More useful configuration variables:
 
   **src/main/java/Application.java**
   
@@ -42,11 +48,13 @@ Some useful configuration variables:
   **src/resources/shaders/frag.shader**
   
     This file contains the math for generating the Mandelbrot Set. 
-    If you wish to change the colours of the set you should modify the colorFunc function.
-    It takes in a parameter "iter" which is the number of iterations it took before the 
-    modulus of a point on the set became >= 4.
+    If you wish to change the colours of the set without the UI you should modify the 
+    colorFunc function.
+    It takes in the uniform u_maxIter which is the number of iterations it took before 
+    the modulus of a point on the set became >= 4.
     
 ## Libraries
 
 * [LWJGL 3](https://www.lwjgl.org/) (minimal OpenGL configuration)
 * [JOML](https://github.com/JOML-CI/JOML) (math library)
+* [Dear ImGUI](https://github.com/SpaiR/imgui-java) (pure java binding of the C++ UI library)
