@@ -88,6 +88,16 @@ public class Shader {
         }
     }
 
+    public void setUniVec1f(String name, float[] vector) {
+        int uniformLocation = GL30.glGetUniformLocation(programID, name);
+        if(uniformLocation != -1) {
+            GL30.glUniform1fv(uniformLocation, vector);
+        }
+        else {
+            System.out.println("The name " + name + " does not correspond to an active uniform variable in the current shader.");
+        }
+    }
+
     private static String parseShaderFromFile(String filePath) {
         StringBuilder data = new StringBuilder();
         String line = "";

@@ -33,6 +33,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jcenter.com</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -77,6 +84,21 @@
             <groupId>org.joml</groupId>
             <artifactId>joml</artifactId>
             <version>${joml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.imgui.java</groupId>
+            <artifactId>binding</artifactId>
+            <version>1.74-0.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.imgui.java</groupId>
+            <artifactId>lwjgl3</artifactId>
+            <version>1.74-0.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.imgui.java</groupId>
+            <artifactId>natives-windows</artifactId>
+            <version>1.74-0.4.1</version>
         </dependency>
     </dependencies>
 

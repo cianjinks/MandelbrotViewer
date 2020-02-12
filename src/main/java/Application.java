@@ -1,3 +1,7 @@
+import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.enums.ImGuiCond;
+import imgui.gl3.ImGuiImplGl3;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
@@ -22,7 +26,8 @@ public class Application {
     private final int WIDTH = 4;
     private final int HEIGHT = 4;
     private final String TITLE = "Mandelbrot Viewer";
-    private final Vector4f BACKGROUND_COLOUR = new Vector4f(0.6f, 0.0f, 46f / 255f, 1.0f);
+    //private final Vector4f BACKGROUND_COLOUR = new Vector4f(0.6f, 0.0f, 46f / 255f, 1.0f);
+    private final Vector4f BACKGROUND_COLOUR = new Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
 
     private int screenshotCount = 1;
     private boolean moveRight = false;
@@ -31,6 +36,17 @@ public class Application {
     private boolean moveDown = false;
     private boolean zoomIn = false;
     private boolean zoomOut = false;
+
+    // GUI
+    private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+    final ImGuiIO io = ImGui.getIO();
+    private final int[] winWidth = new int[1];
+    private final int[] winHeight = new int[1];
+    private final int[] fbWidth = new int[1];
+    private final int[] fbHeight = new int[1];
+
+    private final double[] mousePosX = new double[1];
+    private final double[] mousePosY = new double[1];
 
     public void run() {
         init();
@@ -65,7 +81,13 @@ public class Application {
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+        ImGui.createContext();
+        ImGui.styleColorsDark();
+        io.setIniFilename(null);
+        io.setBackendPlatformName("imgui_java_impl_glfw");
+        io.setBackendRendererName("imgui_java_impl_lwjgl");
+        glfwSetKeyCallback(window, (w, key, scancode, action, mods) -> {
+
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
             }
@@ -73,9 +95,9 @@ public class Application {
             // Camera Control
             // Screenshot: TODO - Is Broken
             /**if (key == GLFW_KEY_K && action == GLFW_PRESS) {
-                camera.takeScreenShot("res/screenshots/screenshot" + screenshotCount + ".jpg", PIXEL_WIDTH, PIXEL_HEIGHT);
-                screenshotCount++;
-            }**/
+             camera.takeScreenShot("res/screenshots/screenshot" + screenshotCount + ".jpg", PIXEL_WIDTH, PIXEL_HEIGHT);
+             screenshotCount++;
+             }**/
 
             // Right:
             if (key == GLFW_KEY_D && action == GLFW_PRESS) {
@@ -125,9 +147,28 @@ public class Application {
                 zoomOut = false;
             }
         });
-        glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
+
+        glfwSetMouseButtonCallback(window, (w, button, action, mods) -> {
+            final boolean[] mouseDown = new boolean[5];
+
+            mouseDown[0] = button == GLFW_MOUSE_BUTTON_1 && action != GLFW_RELEASE;
+            mouseDown[1] = button == GLFW_MOUSE_BUTTON_2 && action != GLFW_RELEASE;
+            mouseDown[2] = button == GLFW_MOUSE_BUTTON_3 && action != GLFW_RELEASE;
+            mouseDown[3] = button == GLFW_MOUSE_BUTTON_4 && action != GLFW_RELEASE;
+            mouseDown[4] = button == GLFW_MOUSE_BUTTON_5 && action != GLFW_RELEASE;
+
+            io.setMouseDown(mouseDown);
+
+            if (!io.getWantCaptureMouse() && mouseDown[1]) {
+                ImGui.setWindowFocus(null);
+            }
+        });
+
+        glfwSetScrollCallback(window, (w, xOffset, yOffset) -> {
+            io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
+            io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
             float zoomAmount = 1.0f;
-            zoomAmount += yoffset * 0.25f;
+            zoomAmount += yOffset * 0.25f;
             zoomAmount = Math.max(zoomAmount, 0.25f);
             camera.zoom(zoomAmount);
         });
@@ -170,6 +211,8 @@ public class Application {
 
         // Enables openGL debug messages
         GLUtil.setupDebugMessageCallback();
+
+
 
         // Background Colour
         glClearColor(BACKGROUND_COLOUR.x, BACKGROUND_COLOUR.y, BACKGROUND_COLOUR.z, BACKGROUND_COLOUR.w);
@@ -224,6 +267,13 @@ public class Application {
         // Camera (Both axis from -2 to 2)
         camera = new Camera(WIDTH, HEIGHT);
         float zoomAmount = 1.05f;
+
+        // GUI
+        imGuiGl3.init();
+        float[] color = new float[]{0.0f};
+        float[] maxIter = new float[]{100.0f};
+        double time = 0;
+
         // Loop
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
@@ -251,6 +301,8 @@ public class Application {
             // Bind Shader
             shader.bindShader(shader.getProgramID());
             shader.setUniMat4f("u_MVP", camera.getMVP());
+            shader.setUniVec1f("u_Color", color);
+            shader.setUniVec1f("u_maxIter", maxIter);
 
             // Bind VAO
             GL30.glBindVertexArray(vaoID);
@@ -265,12 +317,38 @@ public class Application {
             GL30.glDisableVertexAttribArray(0);
             GL30.glBindVertexArray(0);
 
+            // GUI
+            final double currentTime = glfwGetTime();
+            final double deltaTime = (time > 0) ? (currentTime - time) : 1f / 60f;
+            time = currentTime;
+            glfwGetWindowSize(window, winWidth, winHeight);
+            glfwGetFramebufferSize(window, fbWidth, fbHeight);
+            glfwGetCursorPos(window, mousePosX, mousePosY);
+            io.setDisplaySize(winWidth[0], winHeight[0]);
+            io.setDisplayFramebufferScale((float) fbWidth[0] / winWidth[0], (float) fbHeight[0] / winHeight[0]);
+            io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);
+            io.setDeltaTime((float) deltaTime);
+            ImGui.newFrame();
+
+            ImGui.setNextWindowSize(300, 100, ImGuiCond.Once);
+            ImGui.setNextWindowPos(10, 10, ImGuiCond.Once);
+            ImGui.begin("Configuration");
+            ImGui.sliderFloat("Color", color, 0.0f, 1.0f);
+            ImGui.sliderFloat("Iterations", maxIter, 0.0f, 1000.0f);
+            ImGui.text("FPS: " + io.getFramerate());
+            ImGui.end();
+
+            ImGui.render();
+            imGuiGl3.render(ImGui.getDrawData());
+
             glfwSwapBuffers(window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
         }
+        imGuiGl3.dispose();
+        ImGui.destroyContext();
         shader.deleteShader();
     }
 

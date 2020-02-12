@@ -1,6 +1,9 @@
 #version 410 core
 precision highp float;
 
+uniform float u_Color;
+uniform float u_maxIter;
+
 in vec4 pass_Position;
 
 vec2 squareImaginary(vec2 imaginaryNum) {
@@ -12,7 +15,7 @@ vec2 squareImaginary(vec2 imaginaryNum) {
 
 vec3 colorFunc(int iter) {
     // Color in HSV
-    vec3 color = vec3(0.95 + 0.012*iter , 1.0, 0.2+.4*(1.0+sin(0.3*iter)));
+    vec3 color = vec3(u_Color + 0.012*iter , 1.0, 0.2+.4*(1.0+sin(0.3*iter)));
 
     // Convert from HSV to RGB
     // Taken from: http://lolengine.net/blog/2013/07/27/rgb-to-hsv-in-glsl
@@ -28,7 +31,7 @@ void main() {
     z = c;
 
     int iter;
-    for(iter = 0; iter < 100; iter++) {
+    for(iter = 0; iter < u_maxIter; iter++) {
         //fc(z) = z^2 + c
         vec2 result = squareImaginary(z) + c;
         if(length(result) > 4.0) {
