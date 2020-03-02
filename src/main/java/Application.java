@@ -307,6 +307,7 @@ public class Application {
             // Bind VAO
             GL30.glBindVertexArray(vaoID);
             GL30.glEnableVertexAttribArray(0);
+            GL30.glEnableVertexAttribArray(1);
             GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, iboID);
 
             // Draw the vertices
