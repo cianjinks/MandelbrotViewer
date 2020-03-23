@@ -8,7 +8,7 @@
     <artifactId>MandelbrotViewer</artifactId>
     <version>1.1</version>
 
-    <url>https://github.com/HobbesOSWasTaken/MandelbrotViewer</url>
+    <url>https://github.com/cianjinks/MandelbrotViewer</url>
 
     <licenses>
         <license>
@@ -19,7 +19,7 @@
 
     <developers>
         <developer>
-            <name>HobbesOS</name>
+            <name>Cian Jinks</name>
             <email>cjinks99@gmail.com</email>
         </developer>
     </developers>
