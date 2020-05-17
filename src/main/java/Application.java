@@ -259,10 +259,11 @@ public class Application {
         GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, 0);
 
         // Shaders
-        Shader shader = new Shader();
-        shader.setupShader("/shaders/vert.shader", GL20.GL_VERTEX_SHADER);
-        shader.setupShader("/shaders/frag.shader", GL20.GL_FRAGMENT_SHADER);
-        shader.bindShaderAttribute(0, "in_Position");
+        Shader shaderHandler = new Shader();
+        shaderHandler.addShader("/shaders/vert.shader", GL30.GL_VERTEX_SHADER);
+        shaderHandler.addShader("/shaders/frag.shader", GL30.GL_FRAGMENT_SHADER);
+        shaderHandler.bindShaderAttribute(0, "in_Position");
+        shaderHandler.validateProgram();
 
         // Camera (Both axis from -2 to 2)
         camera = new Camera(WIDTH, HEIGHT);
@@ -299,10 +300,10 @@ public class Application {
             }
 
             // Bind Shader
-            shader.bindShader(shader.getProgramID());
-            shader.setUniMat4f("u_MVP", camera.getMVP());
-            shader.setUniVec1f("u_Color", color);
-            shader.setUniVec1f("u_maxIter", maxIter);
+            shaderHandler.bindProgram();
+            shaderHandler.setUniMat4f("u_MVP", camera.getMVP());
+            shaderHandler.setUniVec1f("u_Color", color);
+            shaderHandler.setUniVec1f("u_maxIter", maxIter);
 
             // Bind VAO
             GL30.glBindVertexArray(vaoID);
@@ -350,7 +351,7 @@ public class Application {
         }
         imGuiGl3.dispose();
         ImGui.destroyContext();
-        shader.deleteShader();
+        shaderHandler.unBindProgram();
     }
 
     public static void main(String[] args) {
