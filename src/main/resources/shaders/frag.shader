@@ -3,11 +3,13 @@ precision highp float;
 
 uniform float u_Color;
 uniform float u_maxIter;
+uniform dvec2 u_CameraPos;
+uniform double u_CameraZoom;
 
 in vec4 pass_Position;
 
-vec2 squareImaginary(vec2 imaginaryNum) {
-    vec2 imaginaryResult;
+dvec2 squareImaginary(dvec2 imaginaryNum) {
+    dvec2 imaginaryResult;
     imaginaryResult.x = (imaginaryNum.x * imaginaryNum.x) - (imaginaryNum.y * imaginaryNum.y);
     imaginaryResult.y = 2 * imaginaryNum.x * imaginaryNum.y;
     return imaginaryResult;
@@ -25,15 +27,16 @@ vec3 colorFunc(int iter) {
 }
 
 void main() {
-    vec2 c, z;
+    dvec2 doublePosition = dvec2(pass_Position.x, pass_Position.y);
+    dvec2 c, z;
     vec3 color = vec3(0.0, 0.0, 0.0);
-    c = vec2(pass_Position.x, pass_Position.y);
+    c = dvec2((doublePosition.x * 2 * u_CameraZoom) + u_CameraPos.x, (pass_Position.y * 2 * u_CameraZoom) + u_CameraPos.y);
     z = c;
 
     int iter;
     for(iter = 0; iter < u_maxIter; iter++) {
         //fc(z) = z^2 + c
-        vec2 result = squareImaginary(z) + c;
+        dvec2 result = squareImaginary(z) + c;
         if(length(result) > 4.0) {
             color = colorFunc(iter);
             break;

@@ -6,7 +6,7 @@
 
     <groupId>com.hobbesos</groupId>
     <artifactId>MandelbrotViewer</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <url>https://github.com/cianjinks/MandelbrotViewer</url>
 

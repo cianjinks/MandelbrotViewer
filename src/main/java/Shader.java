@@ -1,10 +1,11 @@
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40C;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
@@ -14,14 +15,14 @@ public class Shader {
     private static int program;
 
     public Shader() {
-        program = GL30.glCreateProgram();
+        program = GL40C.glCreateProgram();
     }
 
     public void addShader(String filePath, int type) {
-        int shaderObj = GL30.glCreateShader(type);
+        int shaderObj = GL40C.glCreateShader(type);
         String source = parseShaderFromFile(filePath);
-        GL30.glShaderSource(shaderObj, source);
-        GL30.glCompileShader(shaderObj);
+        GL40C.glShaderSource(shaderObj, source);
+        GL40C.glCompileShader(shaderObj);
 
         //ERROR HANDLING
         int result = GL20.glGetShaderi(shaderObj, GL20.GL_COMPILE_STATUS);
@@ -35,20 +36,20 @@ public class Shader {
             GL20.glDeleteShader(shaderObj);
         }
 
-        GL30.glAttachShader(program, shaderObj);
+        GL40C.glAttachShader(program, shaderObj);
     }
 
     public void bindProgram() {
-        GL30.glUseProgram(program);
+        GL40C.glUseProgram(program);
     }
 
     public void validateProgram() {
-        GL30.glLinkProgram(program);
-        GL30.glValidateProgram(program);
+        GL40C.glLinkProgram(program);
+        GL40C.glValidateProgram(program);
     }
 
     public void unBindProgram() {
-        GL30.glUseProgram(0);
+        GL40C.glUseProgram(0);
     }
 
     public void setUniMat4f(String name, Matrix4f matrix) {
@@ -56,7 +57,7 @@ public class Shader {
         // TODO: Add location cache
         FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4 * 4);
         matrix.get(matrixBuffer);
-        int uniformLocation = GL30.glGetUniformLocation(program, name);
+        int uniformLocation = GL40C.glGetUniformLocation(program, name);
         if(uniformLocation != -1) {
             GL20.glUniformMatrix4fv(uniformLocation, false, matrixBuffer);
         }
@@ -66,9 +67,29 @@ public class Shader {
     }
 
     public void setUniVec1f(String name, float[] vector) {
-        int uniformLocation = GL30.glGetUniformLocation(program, name);
+        int uniformLocation = GL40C.glGetUniformLocation(program, name);
         if(uniformLocation != -1) {
-            GL30.glUniform1fv(uniformLocation, vector);
+            GL40C.glUniform1fv(uniformLocation, vector);
+        }
+        else {
+            System.out.println("The name " + name + " does not correspond to an active uniform variable in the current shader.");
+        }
+    }
+    
+    public void setUniVec1d(String name, double vector) {
+        int uniformLocation = GL40C.glGetUniformLocation(program, name);
+        if(uniformLocation != -1) {
+            GL40C.glUniform1dv(uniformLocation, new double[]{vector});
+        }
+        else {
+            System.out.println("The name " + name + " does not correspond to an active uniform variable in the current shader.");
+        }
+    }
+
+    public void setUniVec2d(String name, DoubleBuffer vector) {
+        int uniformLocation = GL40C.glGetUniformLocation(program, name);
+        if(uniformLocation != -1) {
+            GL40C.glUniform2dv(uniformLocation, vector);
         }
         else {
             System.out.println("The name " + name + " does not correspond to an active uniform variable in the current shader.");

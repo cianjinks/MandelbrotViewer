@@ -6,7 +6,7 @@ in vec4 in_Position;
 
 out vec4 pass_Position;
 void main(void) {
-	gl_Position = u_MVP * in_Position;
+	gl_Position = in_Position;
 
 	pass_Position = in_Position;
 }

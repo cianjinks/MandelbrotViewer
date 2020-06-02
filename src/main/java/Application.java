@@ -2,6 +2,7 @@ import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.enums.ImGuiCond;
 import imgui.gl3.ImGuiImplGl3;
+import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
@@ -20,7 +21,13 @@ public class Application {
 
     // The window handle
     private long window;
-    private Camera camera;
+    //private Camera camera;
+    private Vector2d cameraTranslation = new Vector2d();
+    private double basePanningSpeed = 0.0125f;
+    private double currentPanningSpeed = 0.0125f;
+    private double cameraZoom = 1.0f;
+    private double zoomSpeed = 1.05f;
+
     private final int PIXEL_WIDTH = 480 * 2;
     private final int PIXEL_HEIGHT = 480 * 2;
     private final int WIDTH = 4;
@@ -170,7 +177,7 @@ public class Application {
             float zoomAmount = 1.0f;
             zoomAmount += yOffset * 0.25f;
             zoomAmount = Math.max(zoomAmount, 0.25f);
-            camera.zoom(zoomAmount);
+            cameraZoom = cameraZoom * zoomAmount;
         });
 
         // Get the thread stack and push a new frame
@@ -266,7 +273,6 @@ public class Application {
         shaderHandler.validateProgram();
 
         // Camera (Both axis from -2 to 2)
-        camera = new Camera(WIDTH, HEIGHT);
         float zoomAmount = 1.05f;
 
         // GUI
@@ -281,27 +287,33 @@ public class Application {
 
             // Camera Movement
             if(moveRight) {
-                camera.move(new Vector3f(camera.getSpeed(), 0.0f, 0.0f));
+                cameraTranslation.add(currentPanningSpeed, 0.0f);
             }
             if(moveLeft) {
-                camera.move(new Vector3f(-camera.getSpeed(), 0.0f, 0.0f));
+                cameraTranslation.add(-currentPanningSpeed, 0.0f);
             }
             if(moveUp) {
-                camera.move(new Vector3f(0.0f, camera.getSpeed(), 0.0f));
+                cameraTranslation.add(0.0f, currentPanningSpeed);
             }
             if(moveDown) {
-                camera.move(new Vector3f(0.0f, -camera.getSpeed(), 0.0f));
+                cameraTranslation.add(0.0f, -currentPanningSpeed);
             }
             if(zoomIn) {
-                camera.zoom(zoomAmount);
+                cameraZoom = cameraZoom * zoomSpeed; // Update the zoomAmount
+                currentPanningSpeed = basePanningSpeed / cameraZoom; // Update camera panning speed
             }
             if(zoomOut) {
-                camera.zoom(1.0f / zoomAmount);
+                cameraZoom = cameraZoom * (1 / zoomSpeed); // Update the zoomAmount
+                currentPanningSpeed = basePanningSpeed / cameraZoom; // Update camera panning speed
             }
 
             // Bind Shader
             shaderHandler.bindProgram();
-            shaderHandler.setUniMat4f("u_MVP", camera.getMVP());
+            shaderHandler.setUniVec1d("u_CameraZoom", 1 / cameraZoom);
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                DoubleBuffer cameraBuffer = cameraTranslation.get(stack.mallocDouble(2));
+                shaderHandler.setUniVec2d("u_CameraPos", cameraBuffer);
+            }
             shaderHandler.setUniVec1f("u_Color", color);
             shaderHandler.setUniVec1f("u_maxIter", maxIter);
 
