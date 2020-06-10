@@ -1,6 +1,6 @@
 # Mandelbrot Viewer
 Mandelbrot Viewer is a simple application which utilises the GPU via OpenGL to visualize the Mandelbrot Set in real time.  
-It has up to a 64-bit zoom due to the limitations of OpenGL floats.
+It has up to a 64-bit zoom due to the limitations of OpenGL doubles.
 
 I wrote a tutorial series on how to create this project on my blog which can be found [here](https://cianjinks.github.io/2020-05-16-opengl-tutorial-visualizing-the-mandelbrot-set-fractal-part-1-of-2/).
 
