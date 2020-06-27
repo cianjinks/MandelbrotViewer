@@ -3,7 +3,6 @@ import imgui.ImGuiIO;
 import imgui.enums.ImGuiCond;
 import imgui.gl3.ImGuiImplGl3;
 import org.joml.Vector2d;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -219,7 +218,11 @@ public class Application {
         // Enables openGL debug messages
         GLUtil.setupDebugMessageCallback();
 
-
+        // Vendor
+        System.out.println("OpenGL Info:");
+        System.out.println("  Vendor: " + glGetString(GL_VENDOR));
+        System.out.println("  Renderer: " + glGetString(GL_RENDERER));
+        System.out.println("  Version: " + glGetString(GL_VERSION));
 
         // Background Colour
         glClearColor(BACKGROUND_COLOUR.x, BACKGROUND_COLOUR.y, BACKGROUND_COLOUR.z, BACKGROUND_COLOUR.w);
@@ -349,7 +352,7 @@ public class Application {
             ImGui.begin("Configuration");
             ImGui.sliderFloat("Color", color, 0.0f, 1.0f);
             ImGui.sliderFloat("Iterations", maxIter, 0.0f, 1000.0f);
-            ImGui.text("FPS: " + io.getFramerate());
+            ImGui.text("FPS: " + (int)(1 / deltaTime) + " | Frame Time: " + String.format("%.2f", deltaTime * 1000) + "ms");
             ImGui.end();
 
             ImGui.render();
